@@ -3,7 +3,7 @@
 Event Countdown App
 The DaysCounter App is a widget that takes a date and the name of an event as input and generates a separate interface element for each event. This element displays the name of the event, the target date, and a string indicating the remaining or elapsed time in years, months, days, minutes, and seconds.
 
-(./Readme-img/DaysCounter.png)
+![Date picker](./Readme-img/DaysCounter.png)
 
 ## Features
 
