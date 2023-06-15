@@ -13,9 +13,13 @@ body {
 }
 
 .wrapper {
-  margin-top: 30px;
   border-radius: 10px;
-  background-color: #4f71f7;
+  background: rgb(238, 174, 202);
+  background: radial-gradient(
+    circle,
+    rgba(238, 174, 202, 1) 0%,
+    rgba(148, 187, 233, 1) 100%
+  );
   height: auto;
   width: 40%;
   min-height: 600px;
@@ -29,6 +33,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 5);
 }
+
 .head {
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
@@ -48,16 +53,39 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #4f71f7;
+  background-color: transparent;
   width: 70%;
   height: 100%;
 }
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+dialog {
+  width: 400px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+dialog h2 {
+  color: red;
+}
+.error-dialog-text {
+  color: black;
+  font-size: 18px;
+}
+.close-dialog {
+  border-radius: 10px;
+  background-color: #d1d9f9;
+}
+
 .btns-setting {
   display: flex;
   align-items: center;
   justify-content: center;
   border-top-right-radius: 10px;
-  background-color: #4f71f7;
+  background-color: transparent;
   width: 30%;
   height: 100%;
 }
@@ -118,6 +146,7 @@ body {
 .past {
   background-color: #e3f2f6;
 }
+
 .upper-box {
   padding-top: 10px;
   padding-left: 10px;
@@ -183,7 +212,7 @@ body {
   padding-right: 10px;
 }
 .footer {
-  background-color: #4f71f7;
+  background-color: transparent;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   width: 100%;
@@ -202,7 +231,12 @@ form {
   gap: 10px;
   margin-top: 10px;
 }
-label {
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+legend {
   font-size: 16px;
   font-weight: 700;
   color: #ffffff;
@@ -222,7 +256,7 @@ label {
   font-weight: 700;
   color: rgb(249, 249, 249);
   border-radius: 30px;
-  background-color: #09a6ef;
+  background-color: #8316c7;
   width: 70%;
   height: 30%;
   margin-bottom: 10px;

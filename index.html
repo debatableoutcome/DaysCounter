@@ -14,6 +14,11 @@
     <script type="module" src="script.js" defer></script>
   </head>
   <body>
+    <dialog class="error-dialog">
+      <h2>Error</h2>
+      <p class="error-dialog-text"></p>
+      <button class="close-dialog">Close</button>
+    </dialog>
     <div class="wrapper">
       <div class="head">
         <div class="heading">Days Counter</div>
@@ -28,34 +33,23 @@
         </div>
       </div>
       <div class="frame">
-        <div class="parent-items">
-          <div class="item item-template hidden">
-            <div class="upper-box">
-              <div id="uiName">Wedding</div>
-            </div>
-            <div class="middle-box">
-              <div id="ui-target-date">12 June 2012</div>
-              <i class="fa-solid fa-xmark btn-del"></i>
-              <div id="to-go" class="hidden"></div>
-              <div id="left" class="hidden">Left</div>
-            </div>
-            <div class="lower-box">
-              <div id="output">3 yrs 8 mos 3 wks 2 days 7 h 34 min 14 sec</div>
-            </div>
-          </div>
-        </div>
+        <div class="parent-items"></div>
       </div>
 
       <div class="footer">
         <form class="date-form">
-          <label
-            >Event Title
-            <input type="text" pattern="^.{0,30}$" id="name-input" />
-          </label>
-          <label
-            >Select a date:
-            <select id="date-select"></select>
-          </label>
+          <fieldset>
+            <legend>
+              Event Title
+              <input type="text" pattern="^.{0,30}$" id="name-input" />
+            </legend>
+          </fieldset>
+          <fieldset>
+            <legend>
+              Select a date:
+              <select id="date-select"></select>
+            </legend>
+          </fieldset>
           <button type="submit" class="btn-add">Add</button>
         </form>
       </div>

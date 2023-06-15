@@ -1,6 +1,6 @@
 "use strict";
 // DAYS COUNTER
-import { isValid, format, compareAsc } from "date-fns";
+import { isValid, format } from "date-fns";
 import moment from "moment";
 moment().format();
 import dom from "./dom.js";
@@ -15,12 +15,13 @@ let state = store.get("state") || [];
 function resetInputs() {
   dom.nameInput.value = "";
   dom.dateSelect.value = "";
+  fp.clear();
 }
 
 function resetItemsScr() {
   dom.parentItems.innerHTML = "";
 }
-function checkForFuture(input, now) {
+function getStringEnding(input, now) {
   if (input > now) return "to go";
   if (input < now) return "left";
 }
@@ -28,7 +29,7 @@ function checkForZero(number, string) {
   if (number === 0) return "";
   if (number > 0) return `<strong>${number}</strong> ${string}`;
 }
-function pastOrFutureClass(str) {
+function getItemStyle(str) {
   if (str.includes("left")) return "future";
   if (str.includes("go")) return "past";
 }
@@ -37,16 +38,20 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function formatDate(inputDate, standard) {
+function formatDate(inputDate, formatStandard) {
   const date = new Date(inputDate);
-  if (standard === "HH:mm, MMM dd, yyyy") {
+  if (formatStandard === "HH:mm, MMM dd, yyyy") {
     return format(date, "HH:mm, MMM dd, yyyy");
   }
-  if (standard === "YYYY-MM-dd HH:MM:SS") {
+  if (formatStandard === "YYYY-MM-dd HH:MM:SS") {
     return format(date, "YYYY-MM-dd HH:MM:SS");
   }
 }
-
+function errorHandler(error) {
+  dom.errorDialogText.textContent = error;
+  console.error(error);
+  dom.errorDialog.showModal();
+}
 function deleteItem(id) {
   state = state.filter((i) => i.id !== id);
   store.set("state", state);
@@ -58,7 +63,7 @@ const fp = flatpickr(dom.dateSelect, {
   dateFormat: "YYYY-mm-dd",
 });
 
-function timeDifference(inputDate) {
+function getOutputString(inputDate) {
   const now = moment();
   const input = moment(inputDate);
   const diff = moment.duration(Math.abs(now.diff(input)));
@@ -69,7 +74,7 @@ function timeDifference(inputDate) {
   const hours = diff.hours();
   const minutes = diff.minutes();
   const seconds = diff.seconds();
-  const agoOrLeft = checkForFuture(input, now);
+  const agoOrLeft = getStringEnding(input, now);
 
   return `${checkForZero(years, "years")} ${checkForZero(
     months,
@@ -80,6 +85,7 @@ function timeDifference(inputDate) {
     "hours"
   )} <strong>${minutes}</strong> minutes <strong>${seconds}</strong> seconds ${agoOrLeft}`;
 }
+// Timer countdown
 setInterval(renderUI, 1000);
 
 function sortBigToSmall() {
@@ -102,13 +108,11 @@ function renderUI() {
   state = store.get("state") || [];
   // Guard clause
   if (!state.length) return;
-  console.log(state);
   state.forEach((obj) => {
-    console.log(obj.inputDate);
     // Assemble a div
-    const str = timeDifference(obj.inputDate);
+    const str = getOutputString(obj.inputDate);
 
-    const html = `<div class="item ${pastOrFutureClass(str)}">
+    const html = `<div class="item ${getItemStyle(str)}">
           <div class="upper-box">
             <div id="uiName">${obj.name}</div>
           </div>
@@ -129,30 +133,33 @@ function renderUI() {
 
 function createItem(event) {
   event.preventDefault();
-  const selectedDate = fp.selectedDates[0];
-  console.log(selectedDate);
-  // Guard clause
-  if (!selectedDate) {
-    console.log("No date selected");
-    return;
-  }
-  const name = capitalize(dom.nameInput.value);
+  try {
+    const selectedDate = fp.selectedDates[0];
 
-  if (!isValid(new Date(selectedDate))) {
-    console.log("Invalid date:", selectedDate);
-    return;
-  }
-  if (name === "" || selectedDate === "") return;
+    // Guard clause
+    if (!selectedDate) {
+      throw new Error("No date selected");
+    }
+    const name = capitalize(dom.nameInput.value);
 
-  const obj = {};
-  obj.name = name;
-  obj.dateUI = formatDate(selectedDate, "HH:mm, MMM dd, yyyy");
-  obj.inputDate = selectedDate;
-  obj.id = Math.round(Math.random() * 100000000);
-  state.push(obj);
-  store.set("state", state);
-  resetInputs();
-  renderUI();
+    if (!isValid(new Date(selectedDate))) {
+      throw new Error("Invalid date:", selectedDate);
+    }
+    if (name === "" || selectedDate === "")
+      throw new Error("Date needs to be selected:");
+
+    const obj = {};
+    obj.name = name;
+    obj.dateUI = formatDate(selectedDate, "HH:mm, MMM dd, yyyy");
+    obj.inputDate = selectedDate;
+    obj.id = Math.round(Math.random() * 100000000);
+    state.push(obj);
+    store.set("state", state);
+    resetInputs();
+    renderUI();
+  } catch (error) {
+    errorHandler(error);
+  }
 }
 //%%%%%%%%%%%%%%%%%% EVENT-LISTENERS %%%%%%%%%%%%%%%%%%%%
 
@@ -180,8 +187,12 @@ dom.wrapper.addEventListener("click", function (event) {
   ) {
     sortSmallToBig();
   }
+  if (target.classList.contains("close-dialog")) {
+    dom.errorDialog.close();
+  }
 });
 
+dom.errorDialog.addEventListener("click", dom.errorDialog.close);
 // Start
 document.addEventListener("DOMContentLoaded", renderUI);
 
@@ -195,9 +206,4 @@ document.addEventListener("DOMContentLoaded", renderUI);
 // REFACTOR
 
 //DONE TODAY:
-// Sorting btn
-// Listeners
-// Timer
-// Reformat string
-// Add ago or left to the string
-// css classes for future and past items
+// error Dialog, error handling, improved function naming, calendar clear
