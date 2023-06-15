@@ -15,7 +15,7 @@ Clone the repository: git clone https://github.com/debatableoutcome/DaysCounter.
 Open the project directory: cd DaysCounter
 Install dependencies: npm install
 Start the development server: npm start
-Access the app in your browser at http://localhost:3000
+Access the app in your browser at http://localhost:1234
 Usage
 Launch the app in your browser.
 Enter the name of the event and select the target date.
