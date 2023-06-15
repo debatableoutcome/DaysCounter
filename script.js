@@ -206,4 +206,3 @@ document.addEventListener("DOMContentLoaded", renderUI);
 // REFACTOR
 
 //DONE TODAY:
-// error Dialog, error handling, improved function naming, calendar clear
